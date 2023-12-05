@@ -1,4 +1,5 @@
 import React from "react";
+import ProfilePic from "../assets/picx.jpeg";
 
 const Home = () => {
   return (
@@ -22,7 +23,7 @@ const Home = () => {
               <div className="flex items-center gap-x-6">
                 <img
                   className="h-16 w-16 rounded-full"
-                  src="../public/picx.jpeg"
+                  src={ProfilePic}
                   alt="CEO's-photo"
                 />
                 <div>
