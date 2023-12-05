@@ -3,9 +3,6 @@ import reactLogo from "./assets/react.svg";
 import CreateNewMovie from "./components/CreateNewMovie";
 import Filter from "./components/Filter";
 import MovieList from "./components/MovieList";
-import MovieMarketPlace from "./components/MoviemarketPlace";
-
-import NavBar from "./components/NavBar";
 import movies from "./data";
 import { useMemo, useState } from "react";
 import Home from "./components/Home";
@@ -13,6 +10,8 @@ import MovieDetails from "./components/MovieDetails";
 
 import React from "react";
 import MovieLayout from "./components/layout/MovieLayout";
+import MovieMarketPlace from "./components/Moviemarketplace";
+import NavBar from "./components/Navbar";
 
 function App() {
   return (
