@@ -3,7 +3,23 @@ import { Input, Select } from "antd";
 
 const { Search } = Input;
 
-const Filter = () => {
+const Filter = ({ memorizedMovies: { myMomorizedMovies }, setmyMovies }) => {
+  //The method for filter by rating
+  const filterByRate = (rate) => {
+    let filteredMovies = myMomorizedMovies.filter(
+      (item) => item.rating === Number(rate)
+    );
+    setmyMovies(filteredMovies);
+  };
+
+  //The method for filter by search
+  const filterBySearch = (value) => {
+    let filteredMovies = myMomorizedMovies.filter((item) =>
+      item.title.toLocaleLowerCase().includes(value.toLocaleLowerCase().trim())
+    );
+    setmyMovies(filteredMovies);
+  };
+
   return (
     <div className="flex gap-4">
       <Search

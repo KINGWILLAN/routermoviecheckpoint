@@ -1,31 +1,149 @@
 import React, { useState } from "react";
-import { Button, Modal } from "antd";
+import { Button, Modal, Input, Rate, message } from "antd";
+import validator from "validator";
+import { VideoCameraAddOutlined } from "@ant-design/icons";
 
-const CreateNewMovie = () => {
+const CreateNewMovie = ({ setmyMovies, setRandom, memorizedMovies }) => {
+  const [movieInfor, setMovieInfor] = useState({
+    id: Math.random(),
+    title: "",
+    description: "",
+    postUrl: "",
+    rating: "",
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const handleInput = (event) => {
+    const { id, value } = event.target;
+    setMovieInfor((preValue) => {
+      return {
+        ...preValue,
+        [id]: value,
+      };
+    });
+    // console.log(movieInfor);
+  };
+  
+  const handleRate = (value) => {
+    setMovieInfor((preValue) => ({
+      ...preValue,
+      rating: value,
+    }));
+  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    setIsModalOpen(false);
+
+    if (!validator.isUrl (movieInfor.postUrl)) {messageApi.open({
+      type:"error",
+      content:"please provide valid URL",
+    });
+    return;
+    }
+
+     if (validator.isEmpty(movieInfor.title)) {
+       messageApi.open({
+         type: "error",
+         content: "Please provide a valid movie title",
+       });
+       return;
+     }
+
+  if (movieInfor.rating < 1) {
+    messageApi.open({
+      type: "error",
+      content: "Please rate a movie",
+    });
+    return;
+  }
+
+  // Validate movie description;
+  if (validator.isEmpty(movieInfor.description)) {
+    messageApi.open({
+      type: "error",
+      content: "Please movie description",
+    });
+    return;
+  }
+
+  messageApi.open({
+    type: "success",
+    content: "Movie Added Successfully",
+  });
+  
+  
+    setmyMovies((preValue) => [
+      movieInfor,
+      ...memorizedMovies.myMomorizedMovies,
+    ]);
+
+    setRandom(Math.random);
+
+    //Reassigns or sets movie infor to empty
+    setMovieInfor({
+      id: Math.random(),
+      title: "",
+      description: "",
+      postUrl: "",
+      rating: "",
+    })
+  
+  setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
+      <Button
+        type="primary"
+        icon={<VideoCameraAddOutlined />}
+        onClick={showModal}
+      >
+        Add New Movie
       </Button>
+
       <Modal
-        title="Basic Modal"
+        title="Add New Movie"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        {contextHolder}
+        <div className="space-y-3">
+          <Input
+            placeholder="Movie poster url"
+            id="postUrl"
+            onChange={handleInput}
+            value={movieInfor.postUrl}
+          />
+          <div>
+            <Input
+              placeholder="Movie title"
+              id="title"
+              onChange={handleInput}
+              value={movieInfor.title}
+            />
+
+            <div className="shadow my-4 rounded-md p-2 w-fit">
+              <p>Rate Movie</p>
+              <Rate onChange={(value) => handleRate(value)} defaultValue={1} />
+            </div>
+          </div>
+          <Input.TextArea
+            rows={4}
+            placeholder="Movie decription"
+            // maxLength={6}
+            id="description"
+            onChange={handleInput}
+            value={movieInfor.description}
+          />
+        </div>
       </Modal>
     </>
   );
